@@ -1,0 +1,1652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0 (Python 3.10.7 on win32)" generated="20240312 18:57:28.077" rpa="false" schemaversion="3">
+<suite id="s1" name="Robot-Api" source="C:\Users\douglas.fsilva\Downloads\Projetos\robot-api">
+<suite id="s1-s1" name="Suite" source="C:\Users\douglas.fsilva\Downloads\Projetos\robot-api\suite">
+<suite id="s1-s1-s1" name="Criação de Pedido de Venda" source="C:\Users\douglas.fsilva\Downloads\Projetos\robot-api\suite\Criação de Pedido de Venda.robot">
+<test id="s1-s1-s1-t1" name="Cenário: Criar Pedido de Venda com Um Item Com Endereço" line="12">
+<kw name="Create List" library="BuiltIn">
+<var>@{product}</var>
+<arg>Product A</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:30.547" level="INFO">@{product} = [ Product A ]</msg>
+<status status="PASS" starttime="20240312 18:57:30.546" endtime="20240312 18:57:30.547"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{quantity}</var>
+<arg>${2}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:30.548" level="INFO">@{quantity} = [ 2 ]</msg>
+<status status="PASS" starttime="20240312 18:57:30.547" endtime="20240312 18:57:30.548"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{price}</var>
+<arg>${25}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:30.550" level="INFO">@{price} = [ 25 ]</msg>
+<status status="PASS" starttime="20240312 18:57:30.549" endtime="20240312 18:57:30.550"/>
+</kw>
+<kw name="request.post.orders" library="post_order">
+<var>${response}</var>
+<arg>order_id=123456</arg>
+<arg>status=Open</arg>
+<arg>items_product=@{product}</arg>
+<arg>items_quantity=@{quantity}</arg>
+<arg>items_price=@{price}</arg>
+<arg>status_code=201</arg>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_street}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>Street Name</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:30.556" level="INFO">${shipping_address_street} = Street Name</msg>
+<status status="PASS" starttime="20240312 18:57:30.555" endtime="20240312 18:57:30.556"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_city}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>City</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:30.557" level="INFO">${shipping_address_city} = City</msg>
+<status status="PASS" starttime="20240312 18:57:30.556" endtime="20240312 18:57:30.557"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_zipcode}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>Zipcode</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:30.558" level="INFO">${shipping_address_zipcode} = Zipcode</msg>
+<status status="PASS" starttime="20240312 18:57:30.557" endtime="20240312 18:57:30.558"/>
+</kw>
+<kw name="items.list" library="post_order">
+<var>${items}</var>
+<var>${total_price}</var>
+<arg>product=${items_product}</arg>
+<arg>quantity=${items_quantity}</arg>
+<arg>price=${items_price}</arg>
+<kw name="Create List" library="BuiltIn">
+<var>${items_list}</var>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:30.560" level="INFO">${items_list} = []</msg>
+<status status="PASS" starttime="20240312 18:57:30.560" endtime="20240312 18:57:30.560"/>
+</kw>
+<for flavor="IN ZIP">
+<var>${l1-product}</var>
+<var>${l2-quantity}</var>
+<var>${l3-price}</var>
+<value>${product}</value>
+<value>${quantity}</value>
+<value>${price}</value>
+<iter>
+<var name="${l1-product}">Product A</var>
+<var name="${l2-quantity}">2</var>
+<var name="${l3-price}">25</var>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${item}</var>
+<arg>product=${l1-product}</arg>
+<arg>quantity=${l2-quantity}</arg>
+<arg>price=${l3-price}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:30.562" level="INFO">${item} = {'product': 'Product A', 'quantity': 2, 'price': 25}</msg>
+<status status="PASS" starttime="20240312 18:57:30.561" endtime="20240312 18:57:30.562"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${items_list}</arg>
+<arg>${item}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20240312 18:57:30.562" endtime="20240312 18:57:30.563"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:30.561" endtime="20240312 18:57:30.563"/>
+</iter>
+<status status="PASS" starttime="20240312 18:57:30.560" endtime="20240312 18:57:30.563"/>
+</for>
+<kw name="Evaluate" library="BuiltIn">
+<var>${total_price}</var>
+<arg>sum(int(item['quantity']) * int(item['price']) for item in ${items_list})</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240312 18:57:30.564" level="INFO">${total_price} = 50</msg>
+<status status="PASS" starttime="20240312 18:57:30.563" endtime="20240312 18:57:30.564"/>
+</kw>
+<msg timestamp="20240312 18:57:30.565" level="INFO">${items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<msg timestamp="20240312 18:57:30.565" level="INFO">${total_price} = 50</msg>
+<status status="PASS" starttime="20240312 18:57:30.558" endtime="20240312 18:57:30.565"/>
+</kw>
+<kw name="body.post.orders" library="post_order">
+<var>${body}</var>
+<arg>order_id=${order_id}</arg>
+<arg>total_price=${total_price}</arg>
+<arg>status=${status}</arg>
+<arg>customer_name=${user_data.${env}.user_name}</arg>
+<arg>customer_email=${user_data.${env}.user_email}</arg>
+<arg>items=${items}</arg>
+<arg>street=${shipping_address_street}</arg>
+<arg>city=${shipping_address_city}</arg>
+<arg>zipcode=${shipping_address_zipcode}</arg>
+<kw name="Load JSON From File" library="JSONLibrary">
+<var>${body}</var>
+<arg>C:\\Users\\douglas.fsilva\\Downloads\\Projetos\\robot-api\\Resources\\requests${/}json${/}post_order.json</arg>
+<doc>Load JSON from file.</doc>
+<msg timestamp="20240312 18:57:30.574" level="INFO">${body} = {'order': {'order_id': '', 'total_price': 0, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:30.573" endtime="20240312 18:57:30.574"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.order_id</arg>
+<arg>${order_id}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.632" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 0, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:30.574" endtime="20240312 18:57:30.632"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.total_price</arg>
+<arg>${total_price}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.669" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:30.632" endtime="20240312 18:57:30.669"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.status</arg>
+<arg>${status}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.711" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:30.669" endtime="20240312 18:57:30.711"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.customer.name</arg>
+<arg>${customer_name}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.745" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:30.711" endtime="20240312 18:57:30.746"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.customer.email</arg>
+<arg>${customer_email}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.779" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'z...</msg>
+<status status="PASS" starttime="20240312 18:57:30.746" endtime="20240312 18:57:30.779"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.items</arg>
+<arg>${items}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.810" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:30.779" endtime="20240312 18:57:30.810"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.street</arg>
+<arg>${street}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.841" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:30.811" endtime="20240312 18:57:30.841"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.city</arg>
+<arg>${city}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.872" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:30.841" endtime="20240312 18:57:30.872"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.zipcode</arg>
+<arg>${zipcode}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:30.902" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:30.872" endtime="20240312 18:57:30.902"/>
+</kw>
+<msg timestamp="20240312 18:57:30.902" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:30.566" endtime="20240312 18:57:30.903"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${body}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20240312 18:57:30.903" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:30.903" endtime="20240312 18:57:30.903"/>
+</kw>
+<kw name="session.orders" library="order_session">
+<var>${alias}</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${alias}</var>
+<arg>orders</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240312 18:57:30.904" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:30.904" endtime="20240312 18:57:30.904"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${headers}</var>
+<arg>user_id=user_1</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:30.904" level="INFO">${headers} = {'user_id': 'user_1'}</msg>
+<status status="PASS" starttime="20240312 18:57:30.904" endtime="20240312 18:57:30.904"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${cookies}</var>
+<arg>_id=1234</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:30.905" level="INFO">${cookies} = {'_id': '1234'}</msg>
+<status status="PASS" starttime="20240312 18:57:30.905" endtime="20240312 18:57:30.905"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>${auth}</var>
+<arg>${user_data.${env}.user_email}</arg>
+<arg>${user_data.${env}.password}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:30.906" level="INFO">${auth} = ['test_qa@robot.com', 'qa123']</msg>
+<status status="PASS" starttime="20240312 18:57:30.905" endtime="20240312 18:57:30.906"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>alias=${alias}</arg>
+<arg>url=${url.${env}}</arg>
+<arg>verify=${True}</arg>
+<arg>headers=${headers}</arg>
+<arg>cookies=${cookies}</arg>
+<arg>auth=${auth}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20240312 18:57:30.908" level="INFO">Creating Session using : alias=orders, url=https://jsonplaceholder.typicode.com, headers={'user_id': 'user_1'},                     cookies={'_id': '1234'}, auth=&lt;requests.auth.HTTPBasicAuth object at 0x0000019E59EBF190&gt;, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20240312 18:57:30.906" endtime="20240312 18:57:30.908"/>
+</kw>
+<msg timestamp="20240312 18:57:30.909" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:30.903" endtime="20240312 18:57:30.909"/>
+</kw>
+<kw name="POST On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>alias=${alias}</arg>
+<arg>url=/posts</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=${status_code}</arg>
+<arg>msg=Falha ao criar pedida de venda</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<msg timestamp="20240312 18:57:31.762" level="INFO">POST Request : url=https://jsonplaceholder.typicode.com/posts 
+ path_url=/posts 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'user_id': 'user_1', 'Cookie': '_id=1234', 'Content-Length': '288', 'Content-Type': 'application/json', 'Authorization': 'Basic dGVzdF9xYUByb2JvdC5jb206cWExMjM='} 
+ body=b'{"order": {"order_id": "123456", "total_price": 50, "status": "Open", "customer": {"name": "Test User QA", "email": "test_qa@robot.com"}, "items": [{"product": "Product A", "quantity": 2, "price": 25}], "shipping_address": {"street": "Street Name", "city": "City", "zipcode": "Zipcode"}}}' 
+ </msg>
+<msg timestamp="20240312 18:57:31.762" level="INFO">POST Response : url=https://jsonplaceholder.typicode.com/posts 
+ status=201, reason=Created 
+ headers={'Date': 'Tue, 12 Mar 2024 21:57:52 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '419', 'Connection': 'keep-alive', 'Report-To': '{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1710280672&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=1vEFrNZdYAtmZoU%2Ftb8SIPR6LXf8VqL0JK6xg52cMOg%3D"}]}', 'Reporting-Endpoints': 'heroku-nel=https://nel.heroku.com/reports?ts=1710280672&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=1vEFrNZdYAtmZoU%2Ftb8SIPR6LXf8VqL0JK6xg52cMOg%3D', 'Nel': '{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}', 'X-Powered-By': 'Express', 'X-Ratelimit-Limit': '1000', 'X-Ratelimit-Remaining': '999', 'X-Ratelimit-Reset': '1710280705', 'Vary': 'Origin, X-HTTP-Method-Override, Accept-Encoding', 'Access-Control-Allow-Credentials': 'true', 'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '-1', 'Access-Control-Expose-Headers': 'Location', 'Location': 'https://jsonplaceholder.typicode.com/posts/101', 'X-Content-Type-Options': 'nosniff', 'Etag': 'W/"1a3-yXLcFQgb3oIAQrCGiQTUwvkG8PU"', 'Via': '1.1 vegur', 'CF-Cache-Status': 'DYNAMIC', 'Server': 'cloudflare', 'CF-RAY': '86370add2aece97a-DFW', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={
+  "order": {
+    "order_id": "123456",
+    "total_price": 50,
+    "status": "Open",
+    "customer": {
+      "name": "Test User QA",
+      "email": "test_qa@robot.com"
+    },
+    "items": [
+      {
+        "product": "Product A",
+        "quantity": 2,
+        "price": 25
+      }
+    ],
+    "shipping_address": {
+      "street": "Street Name",
+      "city": "City",
+      "zipcode": "Zipcode"
+    }
+  },
+  "id": 101
+} 
+ </msg>
+<msg timestamp="20240312 18:57:31.762" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:30.909" endtime="20240312 18:57:31.763"/>
+</kw>
+<msg timestamp="20240312 18:57:31.763" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:30.551" endtime="20240312 18:57:31.763"/>
+</kw>
+<kw name="asserts.post.orders" library="assert_post_orders">
+<arg>response=${response}</arg>
+<arg>products=@{product}</arg>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['order_id']}</arg>
+<arg>${body['order']['order_id']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.764" endtime="20240312 18:57:31.765"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response.json()['order']['total_price']}</arg>
+<arg>${body['order']['total_price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:31.765" endtime="20240312 18:57:31.766"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['status']}</arg>
+<arg>${body['order']['status']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.767" endtime="20240312 18:57:31.768"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['customer']['name']}</arg>
+<arg>${body['order']['customer']['name']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.768" endtime="20240312 18:57:31.769"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['customer']['email']}</arg>
+<arg>${body['order']['customer']['email']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.769" endtime="20240312 18:57:31.770"/>
+</kw>
+<for flavor="IN">
+<var>${product}</var>
+<value>@{products}</value>
+<iter>
+<var name="${product}">Product A</var>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${body_items}</var>
+<arg>${body}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:31.803" level="INFO">${body_items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<status status="PASS" starttime="20240312 18:57:31.770" endtime="20240312 18:57:31.803"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${response_items}</var>
+<arg>${response.json()}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:31.832" level="INFO">${response_items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<status status="PASS" starttime="20240312 18:57:31.803" endtime="20240312 18:57:31.832"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response_items[0]['product']}</arg>
+<arg>${body_items[0]['product']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.832" endtime="20240312 18:57:31.835"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['quantity']}</arg>
+<arg>${body_items[0]['quantity']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:31.835" endtime="20240312 18:57:31.837"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['price']}</arg>
+<arg>${body_items[0]['price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:31.837" endtime="20240312 18:57:31.840"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:31.770" endtime="20240312 18:57:31.840"/>
+</iter>
+<status status="PASS" starttime="20240312 18:57:31.770" endtime="20240312 18:57:31.840"/>
+</for>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['street']}</arg>
+<arg>${body['order']['shipping_address']['street']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.840" endtime="20240312 18:57:31.842"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['city']}</arg>
+<arg>${body['order']['shipping_address']['city']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.842" endtime="20240312 18:57:31.843"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['zipcode']}</arg>
+<arg>${body['order']['shipping_address']['zipcode']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:31.843" endtime="20240312 18:57:31.844"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:31.764" endtime="20240312 18:57:31.844"/>
+</kw>
+<tag>post_order</tag>
+<tag>post_order_1</tag>
+<status status="PASS" starttime="20240312 18:57:30.544" endtime="20240312 18:57:31.845"/>
+</test>
+<test id="s1-s1-s1-t2" name="Cenário: Criar Pedido de Venda com Um Item Sem Endereço" line="32">
+<kw name="Create List" library="BuiltIn">
+<var>@{product}</var>
+<arg>Product A</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:31.848" level="INFO">@{product} = [ Product A ]</msg>
+<status status="PASS" starttime="20240312 18:57:31.848" endtime="20240312 18:57:31.848"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{quantity}</var>
+<arg>${2}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:31.849" level="INFO">@{quantity} = [ 2 ]</msg>
+<status status="PASS" starttime="20240312 18:57:31.849" endtime="20240312 18:57:31.849"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{price}</var>
+<arg>${25}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:31.850" level="INFO">@{price} = [ 25 ]</msg>
+<status status="PASS" starttime="20240312 18:57:31.850" endtime="20240312 18:57:31.850"/>
+</kw>
+<kw name="request.post.orders" library="post_order">
+<var>${response}</var>
+<arg>order_id=123456</arg>
+<arg>status=Open</arg>
+<arg>items_product=@{product}</arg>
+<arg>items_quantity=@{quantity}</arg>
+<arg>items_price=@{price}</arg>
+<arg>shipping_address=${False}</arg>
+<arg>status_code=201</arg>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_street}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>Street Name</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:31.853" level="INFO">${shipping_address_street} = Street Name</msg>
+<status status="PASS" starttime="20240312 18:57:31.853" endtime="20240312 18:57:31.853"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_city}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>City</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:31.854" level="INFO">${shipping_address_city} = City</msg>
+<status status="PASS" starttime="20240312 18:57:31.853" endtime="20240312 18:57:31.854"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_zipcode}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>Zipcode</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:31.854" level="INFO">${shipping_address_zipcode} = Zipcode</msg>
+<status status="PASS" starttime="20240312 18:57:31.854" endtime="20240312 18:57:31.854"/>
+</kw>
+<kw name="items.list" library="post_order">
+<var>${items}</var>
+<var>${total_price}</var>
+<arg>product=${items_product}</arg>
+<arg>quantity=${items_quantity}</arg>
+<arg>price=${items_price}</arg>
+<kw name="Create List" library="BuiltIn">
+<var>${items_list}</var>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:31.855" level="INFO">${items_list} = []</msg>
+<status status="PASS" starttime="20240312 18:57:31.855" endtime="20240312 18:57:31.855"/>
+</kw>
+<for flavor="IN ZIP">
+<var>${l1-product}</var>
+<var>${l2-quantity}</var>
+<var>${l3-price}</var>
+<value>${product}</value>
+<value>${quantity}</value>
+<value>${price}</value>
+<iter>
+<var name="${l1-product}">Product A</var>
+<var name="${l2-quantity}">2</var>
+<var name="${l3-price}">25</var>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${item}</var>
+<arg>product=${l1-product}</arg>
+<arg>quantity=${l2-quantity}</arg>
+<arg>price=${l3-price}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:31.856" level="INFO">${item} = {'product': 'Product A', 'quantity': 2, 'price': 25}</msg>
+<status status="PASS" starttime="20240312 18:57:31.856" endtime="20240312 18:57:31.856"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${items_list}</arg>
+<arg>${item}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20240312 18:57:31.856" endtime="20240312 18:57:31.856"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:31.855" endtime="20240312 18:57:31.856"/>
+</iter>
+<status status="PASS" starttime="20240312 18:57:31.855" endtime="20240312 18:57:31.856"/>
+</for>
+<kw name="Evaluate" library="BuiltIn">
+<var>${total_price}</var>
+<arg>sum(int(item['quantity']) * int(item['price']) for item in ${items_list})</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240312 18:57:31.857" level="INFO">${total_price} = 50</msg>
+<status status="PASS" starttime="20240312 18:57:31.857" endtime="20240312 18:57:31.857"/>
+</kw>
+<msg timestamp="20240312 18:57:31.857" level="INFO">${items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<msg timestamp="20240312 18:57:31.857" level="INFO">${total_price} = 50</msg>
+<status status="PASS" starttime="20240312 18:57:31.854" endtime="20240312 18:57:31.857"/>
+</kw>
+<kw name="body.post.orders" library="post_order">
+<var>${body}</var>
+<arg>order_id=${order_id}</arg>
+<arg>total_price=${total_price}</arg>
+<arg>status=${status}</arg>
+<arg>customer_name=${user_data.${env}.user_name}</arg>
+<arg>customer_email=${user_data.${env}.user_email}</arg>
+<arg>items=${items}</arg>
+<arg>street=${shipping_address_street}</arg>
+<arg>city=${shipping_address_city}</arg>
+<arg>zipcode=${shipping_address_zipcode}</arg>
+<kw name="Load JSON From File" library="JSONLibrary">
+<var>${body}</var>
+<arg>C:\\Users\\douglas.fsilva\\Downloads\\Projetos\\robot-api\\Resources\\requests${/}json${/}post_order.json</arg>
+<doc>Load JSON from file.</doc>
+<msg timestamp="20240312 18:57:31.861" level="INFO">${body} = {'order': {'order_id': '', 'total_price': 0, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:31.860" endtime="20240312 18:57:31.861"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.order_id</arg>
+<arg>${order_id}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:31.893" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 0, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:31.861" endtime="20240312 18:57:31.893"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.total_price</arg>
+<arg>${total_price}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:31.924" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:31.893" endtime="20240312 18:57:31.924"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.status</arg>
+<arg>${status}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:31.953" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:31.925" endtime="20240312 18:57:31.953"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.customer.name</arg>
+<arg>${customer_name}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:31.984" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:31.953" endtime="20240312 18:57:31.984"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.customer.email</arg>
+<arg>${customer_email}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.023" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'z...</msg>
+<status status="PASS" starttime="20240312 18:57:31.984" endtime="20240312 18:57:32.023"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.items</arg>
+<arg>${items}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.065" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:32.023" endtime="20240312 18:57:32.065"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.street</arg>
+<arg>${street}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.121" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:32.066" endtime="20240312 18:57:32.121"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.city</arg>
+<arg>${city}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.175" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:32.122" endtime="20240312 18:57:32.175"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.zipcode</arg>
+<arg>${zipcode}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.222" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:32.176" endtime="20240312 18:57:32.222"/>
+</kw>
+<msg timestamp="20240312 18:57:32.223" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:31.858" endtime="20240312 18:57:32.223"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${body}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20240312 18:57:32.223" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 50, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25}...</msg>
+<status status="PASS" starttime="20240312 18:57:32.223" endtime="20240312 18:57:32.223"/>
+</kw>
+<kw name="session.orders" library="order_session">
+<var>${alias}</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${alias}</var>
+<arg>orders</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240312 18:57:32.224" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:32.224" endtime="20240312 18:57:32.224"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${headers}</var>
+<arg>user_id=user_1</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:32.224" level="INFO">${headers} = {'user_id': 'user_1'}</msg>
+<status status="PASS" starttime="20240312 18:57:32.224" endtime="20240312 18:57:32.224"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${cookies}</var>
+<arg>_id=1234</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:32.225" level="INFO">${cookies} = {'_id': '1234'}</msg>
+<status status="PASS" starttime="20240312 18:57:32.224" endtime="20240312 18:57:32.225"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>${auth}</var>
+<arg>${user_data.${env}.user_email}</arg>
+<arg>${user_data.${env}.password}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:32.228" level="INFO">${auth} = ['test_qa@robot.com', 'qa123']</msg>
+<status status="PASS" starttime="20240312 18:57:32.225" endtime="20240312 18:57:32.228"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>alias=${alias}</arg>
+<arg>url=${url.${env}}</arg>
+<arg>verify=${True}</arg>
+<arg>headers=${headers}</arg>
+<arg>cookies=${cookies}</arg>
+<arg>auth=${auth}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20240312 18:57:32.231" level="INFO">Creating Session using : alias=orders, url=https://jsonplaceholder.typicode.com, headers={'user_id': 'user_1'},                     cookies={'_id': '1234'}, auth=&lt;requests.auth.HTTPBasicAuth object at 0x0000019E59FE1720&gt;, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20240312 18:57:32.228" endtime="20240312 18:57:32.232"/>
+</kw>
+<msg timestamp="20240312 18:57:32.233" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:32.223" endtime="20240312 18:57:32.233"/>
+</kw>
+<kw name="POST On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>alias=${alias}</arg>
+<arg>url=/posts</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=${status_code}</arg>
+<arg>msg=Falha ao criar pedida de venda</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<msg timestamp="20240312 18:57:32.923" level="INFO">POST Request : url=https://jsonplaceholder.typicode.com/posts 
+ path_url=/posts 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'user_id': 'user_1', 'Cookie': '_id=1234', 'Content-Length': '288', 'Content-Type': 'application/json', 'Authorization': 'Basic dGVzdF9xYUByb2JvdC5jb206cWExMjM='} 
+ body=b'{"order": {"order_id": "123456", "total_price": 50, "status": "Open", "customer": {"name": "Test User QA", "email": "test_qa@robot.com"}, "items": [{"product": "Product A", "quantity": 2, "price": 25}], "shipping_address": {"street": "Street Name", "city": "City", "zipcode": "Zipcode"}}}' 
+ </msg>
+<msg timestamp="20240312 18:57:32.923" level="INFO">POST Response : url=https://jsonplaceholder.typicode.com/posts 
+ status=201, reason=Created 
+ headers={'Date': 'Tue, 12 Mar 2024 21:57:54 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '419', 'Connection': 'keep-alive', 'Report-To': '{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1710280674&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=faJSkUwCCtptmqNW3%2F5wqFBHesJuUOuGKTAGv1Pxg%2FI%3D"}]}', 'Reporting-Endpoints': 'heroku-nel=https://nel.heroku.com/reports?ts=1710280674&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=faJSkUwCCtptmqNW3%2F5wqFBHesJuUOuGKTAGv1Pxg%2FI%3D', 'Nel': '{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}', 'X-Powered-By': 'Express', 'X-Ratelimit-Limit': '1000', 'X-Ratelimit-Remaining': '998', 'X-Ratelimit-Reset': '1710280705', 'Vary': 'Origin, X-HTTP-Method-Override, Accept-Encoding', 'Access-Control-Allow-Credentials': 'true', 'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '-1', 'Access-Control-Expose-Headers': 'Location', 'Location': 'https://jsonplaceholder.typicode.com/posts/101', 'X-Content-Type-Options': 'nosniff', 'Etag': 'W/"1a3-yXLcFQgb3oIAQrCGiQTUwvkG8PU"', 'Via': '1.1 vegur', 'CF-Cache-Status': 'DYNAMIC', 'Server': 'cloudflare', 'CF-RAY': '86370ae44a052ca4-DFW', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={
+  "order": {
+    "order_id": "123456",
+    "total_price": 50,
+    "status": "Open",
+    "customer": {
+      "name": "Test User QA",
+      "email": "test_qa@robot.com"
+    },
+    "items": [
+      {
+        "product": "Product A",
+        "quantity": 2,
+        "price": 25
+      }
+    ],
+    "shipping_address": {
+      "street": "Street Name",
+      "city": "City",
+      "zipcode": "Zipcode"
+    }
+  },
+  "id": 101
+} 
+ </msg>
+<msg timestamp="20240312 18:57:32.923" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:32.233" endtime="20240312 18:57:32.923"/>
+</kw>
+<msg timestamp="20240312 18:57:32.923" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:31.851" endtime="20240312 18:57:32.923"/>
+</kw>
+<kw name="asserts.post.orders" library="assert_post_orders">
+<arg>response=${response}</arg>
+<arg>products=@{product}</arg>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['order_id']}</arg>
+<arg>${body['order']['order_id']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.925" endtime="20240312 18:57:32.926"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response.json()['order']['total_price']}</arg>
+<arg>${body['order']['total_price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:32.926" endtime="20240312 18:57:32.927"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['status']}</arg>
+<arg>${body['order']['status']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.927" endtime="20240312 18:57:32.928"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['customer']['name']}</arg>
+<arg>${body['order']['customer']['name']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.928" endtime="20240312 18:57:32.929"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['customer']['email']}</arg>
+<arg>${body['order']['customer']['email']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.930" endtime="20240312 18:57:32.931"/>
+</kw>
+<for flavor="IN">
+<var>${product}</var>
+<value>@{products}</value>
+<iter>
+<var name="${product}">Product A</var>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${body_items}</var>
+<arg>${body}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.961" level="INFO">${body_items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<status status="PASS" starttime="20240312 18:57:32.931" endtime="20240312 18:57:32.961"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${response_items}</var>
+<arg>${response.json()}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:32.991" level="INFO">${response_items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<status status="PASS" starttime="20240312 18:57:32.961" endtime="20240312 18:57:32.991"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response_items[0]['product']}</arg>
+<arg>${body_items[0]['product']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.991" endtime="20240312 18:57:32.992"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['quantity']}</arg>
+<arg>${body_items[0]['quantity']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:32.993" endtime="20240312 18:57:32.994"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['price']}</arg>
+<arg>${body_items[0]['price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:32.994" endtime="20240312 18:57:32.995"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:32.931" endtime="20240312 18:57:32.995"/>
+</iter>
+<status status="PASS" starttime="20240312 18:57:32.931" endtime="20240312 18:57:32.995"/>
+</for>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['street']}</arg>
+<arg>${body['order']['shipping_address']['street']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.995" endtime="20240312 18:57:32.997"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['city']}</arg>
+<arg>${body['order']['shipping_address']['city']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.997" endtime="20240312 18:57:32.998"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['zipcode']}</arg>
+<arg>${body['order']['shipping_address']['zipcode']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:32.998" endtime="20240312 18:57:32.999"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:32.924" endtime="20240312 18:57:33.000"/>
+</kw>
+<tag>post_order</tag>
+<tag>post_order_2</tag>
+<status status="PASS" starttime="20240312 18:57:31.847" endtime="20240312 18:57:33.000"/>
+</test>
+<test id="s1-s1-s1-t3" name="Cenário: Criar Pedido de Venda com Mais de Um Item" line="53">
+<kw name="Create List" library="BuiltIn">
+<var>@{product}</var>
+<arg>Product A</arg>
+<arg>Product B</arg>
+<arg>Product C</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:33.003" level="INFO">@{product} = [ Product A | Product B | Product C ]</msg>
+<status status="PASS" starttime="20240312 18:57:33.003" endtime="20240312 18:57:33.003"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{quantity}</var>
+<arg>${2}</arg>
+<arg>${3}</arg>
+<arg>${4}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:33.005" level="INFO">@{quantity} = [ 2 | 3 | 4 ]</msg>
+<status status="PASS" starttime="20240312 18:57:33.004" endtime="20240312 18:57:33.005"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{price}</var>
+<arg>${25}</arg>
+<arg>${35}</arg>
+<arg>${45}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:33.007" level="INFO">@{price} = [ 25 | 35 | 45 ]</msg>
+<status status="PASS" starttime="20240312 18:57:33.006" endtime="20240312 18:57:33.007"/>
+</kw>
+<kw name="request.post.orders" library="post_order">
+<var>${response}</var>
+<arg>order_id=123456</arg>
+<arg>status=Open</arg>
+<arg>items_product=@{product}</arg>
+<arg>items_quantity=@{quantity}</arg>
+<arg>items_price=@{price}</arg>
+<arg>status_code=201</arg>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_street}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>Street Name</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:33.010" level="INFO">${shipping_address_street} = Street Name</msg>
+<status status="PASS" starttime="20240312 18:57:33.010" endtime="20240312 18:57:33.010"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_city}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>City</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:33.011" level="INFO">${shipping_address_city} = City</msg>
+<status status="PASS" starttime="20240312 18:57:33.010" endtime="20240312 18:57:33.011"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${shipping_address_zipcode}</var>
+<arg>'${shipping_address}' != ''</arg>
+<arg>Zipcode</arg>
+<arg>${EMPTY}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20240312 18:57:33.011" level="INFO">${shipping_address_zipcode} = Zipcode</msg>
+<status status="PASS" starttime="20240312 18:57:33.011" endtime="20240312 18:57:33.011"/>
+</kw>
+<kw name="items.list" library="post_order">
+<var>${items}</var>
+<var>${total_price}</var>
+<arg>product=${items_product}</arg>
+<arg>quantity=${items_quantity}</arg>
+<arg>price=${items_price}</arg>
+<kw name="Create List" library="BuiltIn">
+<var>${items_list}</var>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:33.012" level="INFO">${items_list} = []</msg>
+<status status="PASS" starttime="20240312 18:57:33.012" endtime="20240312 18:57:33.012"/>
+</kw>
+<for flavor="IN ZIP">
+<var>${l1-product}</var>
+<var>${l2-quantity}</var>
+<var>${l3-price}</var>
+<value>${product}</value>
+<value>${quantity}</value>
+<value>${price}</value>
+<iter>
+<var name="${l1-product}">Product A</var>
+<var name="${l2-quantity}">2</var>
+<var name="${l3-price}">25</var>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${item}</var>
+<arg>product=${l1-product}</arg>
+<arg>quantity=${l2-quantity}</arg>
+<arg>price=${l3-price}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:33.013" level="INFO">${item} = {'product': 'Product A', 'quantity': 2, 'price': 25}</msg>
+<status status="PASS" starttime="20240312 18:57:33.013" endtime="20240312 18:57:33.014"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${items_list}</arg>
+<arg>${item}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20240312 18:57:33.014" endtime="20240312 18:57:33.014"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:33.013" endtime="20240312 18:57:33.014"/>
+</iter>
+<iter>
+<var name="${l1-product}">Product B</var>
+<var name="${l2-quantity}">3</var>
+<var name="${l3-price}">35</var>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${item}</var>
+<arg>product=${l1-product}</arg>
+<arg>quantity=${l2-quantity}</arg>
+<arg>price=${l3-price}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:33.015" level="INFO">${item} = {'product': 'Product B', 'quantity': 3, 'price': 35}</msg>
+<status status="PASS" starttime="20240312 18:57:33.014" endtime="20240312 18:57:33.015"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${items_list}</arg>
+<arg>${item}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20240312 18:57:33.015" endtime="20240312 18:57:33.015"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:33.014" endtime="20240312 18:57:33.015"/>
+</iter>
+<iter>
+<var name="${l1-product}">Product C</var>
+<var name="${l2-quantity}">4</var>
+<var name="${l3-price}">45</var>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${item}</var>
+<arg>product=${l1-product}</arg>
+<arg>quantity=${l2-quantity}</arg>
+<arg>price=${l3-price}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:33.016" level="INFO">${item} = {'product': 'Product C', 'quantity': 4, 'price': 45}</msg>
+<status status="PASS" starttime="20240312 18:57:33.015" endtime="20240312 18:57:33.016"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${items_list}</arg>
+<arg>${item}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20240312 18:57:33.016" endtime="20240312 18:57:33.017"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:33.015" endtime="20240312 18:57:33.017"/>
+</iter>
+<status status="PASS" starttime="20240312 18:57:33.012" endtime="20240312 18:57:33.017"/>
+</for>
+<kw name="Evaluate" library="BuiltIn">
+<var>${total_price}</var>
+<arg>sum(int(item['quantity']) * int(item['price']) for item in ${items_list})</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20240312 18:57:33.018" level="INFO">${total_price} = 335</msg>
+<status status="PASS" starttime="20240312 18:57:33.017" endtime="20240312 18:57:33.018"/>
+</kw>
+<msg timestamp="20240312 18:57:33.018" level="INFO">${items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}, {'product': 'Product B', 'quantity': 3, 'price': 35}, {'product': 'Product C', 'quantity': 4, 'price': 45}]</msg>
+<msg timestamp="20240312 18:57:33.018" level="INFO">${total_price} = 335</msg>
+<status status="PASS" starttime="20240312 18:57:33.011" endtime="20240312 18:57:33.018"/>
+</kw>
+<kw name="body.post.orders" library="post_order">
+<var>${body}</var>
+<arg>order_id=${order_id}</arg>
+<arg>total_price=${total_price}</arg>
+<arg>status=${status}</arg>
+<arg>customer_name=${user_data.${env}.user_name}</arg>
+<arg>customer_email=${user_data.${env}.user_email}</arg>
+<arg>items=${items}</arg>
+<arg>street=${shipping_address_street}</arg>
+<arg>city=${shipping_address_city}</arg>
+<arg>zipcode=${shipping_address_zipcode}</arg>
+<kw name="Load JSON From File" library="JSONLibrary">
+<var>${body}</var>
+<arg>C:\\Users\\douglas.fsilva\\Downloads\\Projetos\\robot-api\\Resources\\requests${/}json${/}post_order.json</arg>
+<doc>Load JSON from file.</doc>
+<msg timestamp="20240312 18:57:33.022" level="INFO">${body} = {'order': {'order_id': '', 'total_price': 0, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:33.021" endtime="20240312 18:57:33.022"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.order_id</arg>
+<arg>${order_id}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.056" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 0, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:33.022" endtime="20240312 18:57:33.056"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.total_price</arg>
+<arg>${total_price}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.094" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': '', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:33.056" endtime="20240312 18:57:33.094"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.status</arg>
+<arg>${status}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.141" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': '', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:33.094" endtime="20240312 18:57:33.141"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.customer.name</arg>
+<arg>${customer_name}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.169" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': ''}, 'items': [], 'shipping_address': {'street': '', 'city': '', 'zipcode': ''}}}</msg>
+<status status="PASS" starttime="20240312 18:57:33.141" endtime="20240312 18:57:33.169"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.customer.email</arg>
+<arg>${customer_email}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.198" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [], 'shipping_address': {'street': '', 'city': '', '...</msg>
+<status status="PASS" starttime="20240312 18:57:33.169" endtime="20240312 18:57:33.198"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.items</arg>
+<arg>${items}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.225" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25...</msg>
+<status status="PASS" starttime="20240312 18:57:33.198" endtime="20240312 18:57:33.225"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.street</arg>
+<arg>${street}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.250" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25...</msg>
+<status status="PASS" starttime="20240312 18:57:33.225" endtime="20240312 18:57:33.250"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.city</arg>
+<arg>${city}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.291" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25...</msg>
+<status status="PASS" starttime="20240312 18:57:33.250" endtime="20240312 18:57:33.291"/>
+</kw>
+<kw name="Update Value To Json" library="JSONLibrary">
+<var>${body}</var>
+<arg>${body}</arg>
+<arg>$.order.shipping_address.zipcode</arg>
+<arg>${zipcode}</arg>
+<doc>Update value to JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.320" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25...</msg>
+<status status="PASS" starttime="20240312 18:57:33.292" endtime="20240312 18:57:33.320"/>
+</kw>
+<msg timestamp="20240312 18:57:33.321" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25...</msg>
+<status status="PASS" starttime="20240312 18:57:33.018" endtime="20240312 18:57:33.321"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${body}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20240312 18:57:33.322" level="INFO">${body} = {'order': {'order_id': '123456', 'total_price': 335, 'status': 'Open', 'customer': {'name': 'Test User QA', 'email': 'test_qa@robot.com'}, 'items': [{'product': 'Product A', 'quantity': 2, 'price': 25...</msg>
+<status status="PASS" starttime="20240312 18:57:33.321" endtime="20240312 18:57:33.322"/>
+</kw>
+<kw name="session.orders" library="order_session">
+<var>${alias}</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${alias}</var>
+<arg>orders</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240312 18:57:33.323" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:33.323" endtime="20240312 18:57:33.323"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${headers}</var>
+<arg>user_id=user_1</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:33.324" level="INFO">${headers} = {'user_id': 'user_1'}</msg>
+<status status="PASS" starttime="20240312 18:57:33.324" endtime="20240312 18:57:33.324"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${cookies}</var>
+<arg>_id=1234</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:33.325" level="INFO">${cookies} = {'_id': '1234'}</msg>
+<status status="PASS" starttime="20240312 18:57:33.324" endtime="20240312 18:57:33.325"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>${auth}</var>
+<arg>${user_data.${env}.user_email}</arg>
+<arg>${user_data.${env}.password}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:33.327" level="INFO">${auth} = ['test_qa@robot.com', 'qa123']</msg>
+<status status="PASS" starttime="20240312 18:57:33.325" endtime="20240312 18:57:33.327"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>alias=${alias}</arg>
+<arg>url=${url.${env}}</arg>
+<arg>verify=${True}</arg>
+<arg>headers=${headers}</arg>
+<arg>cookies=${cookies}</arg>
+<arg>auth=${auth}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20240312 18:57:33.330" level="INFO">Creating Session using : alias=orders, url=https://jsonplaceholder.typicode.com, headers={'user_id': 'user_1'},                     cookies={'_id': '1234'}, auth=&lt;requests.auth.HTTPBasicAuth object at 0x0000019E59FE2CB0&gt;, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20240312 18:57:33.328" endtime="20240312 18:57:33.331"/>
+</kw>
+<msg timestamp="20240312 18:57:33.331" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:33.322" endtime="20240312 18:57:33.331"/>
+</kw>
+<kw name="POST On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>alias=${alias}</arg>
+<arg>url=/posts</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=${status_code}</arg>
+<arg>msg=Falha ao criar pedida de venda</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<msg timestamp="20240312 18:57:33.824" level="INFO">POST Request : url=https://jsonplaceholder.typicode.com/posts 
+ path_url=/posts 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'user_id': 'user_1', 'Cookie': '_id=1234', 'Content-Length': '397', 'Content-Type': 'application/json', 'Authorization': 'Basic dGVzdF9xYUByb2JvdC5jb206cWExMjM='} 
+ body=b'{"order": {"order_id": "123456", "total_price": 335, "status": "Open", "customer": {"name": "Test User QA", "email": "test_qa@robot.com"}, "items": [{"product": "Product A", "quantity": 2, "price": 25}, {"product": "Product B", "quantity": 3, "price": 35}, {"product": "Product C", "quantity": 4, "price": 45}], "shipping_address": {"street": "Street Name", "city": "City", "zipcode": "Zipcode"}}}' 
+ </msg>
+<msg timestamp="20240312 18:57:33.825" level="INFO">POST Response : url=https://jsonplaceholder.typicode.com/posts 
+ status=201, reason=Created 
+ headers={'Date': 'Tue, 12 Mar 2024 21:57:55 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '604', 'Connection': 'keep-alive', 'Report-To': '{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1710280675&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=jDzxFBFIAoSoBdeAEADIq83xEIXjc2Z4zjMN5xGvFaU%3D"}]}', 'Reporting-Endpoints': 'heroku-nel=https://nel.heroku.com/reports?ts=1710280675&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=jDzxFBFIAoSoBdeAEADIq83xEIXjc2Z4zjMN5xGvFaU%3D', 'Nel': '{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}', 'X-Powered-By': 'Express', 'X-Ratelimit-Limit': '1000', 'X-Ratelimit-Remaining': '999', 'X-Ratelimit-Reset': '1710280705', 'Vary': 'Origin, X-HTTP-Method-Override, Accept-Encoding', 'Access-Control-Allow-Credentials': 'true', 'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '-1', 'Access-Control-Expose-Headers': 'Location', 'Location': 'https://jsonplaceholder.typicode.com/posts/101', 'X-Content-Type-Options': 'nosniff', 'Etag': 'W/"25c-mR+GPRiQ2KsUVkgFhXueGpl5KcU"', 'Via': '1.1 vegur', 'CF-Cache-Status': 'DYNAMIC', 'Server': 'cloudflare', 'CF-RAY': '86370aeaafa88c63-EWR', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={
+  "order": {
+    "order_id": "123456",
+    "total_price": 335,
+    "status": "Open",
+    "customer": {
+      "name": "Test User QA",
+      "email": "test_qa@robot.com"
+    },
+    "items": [
+      {
+        "product": "Product A",
+        "quantity": 2,
+        "price": 25
+      },
+      {
+        "product": "Product B",
+        "quantity": 3,
+        "price": 35
+      },
+      {
+        "product": "Product C",
+        "quantity": 4,
+        "price": 45
+      }
+    ],
+    "shipping_address": {
+      "street": "Street Name",
+      "city": "City",
+      "zipcode": "Zipcode"
+    }
+  },
+  "id": 101
+} 
+ </msg>
+<msg timestamp="20240312 18:57:33.825" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:33.332" endtime="20240312 18:57:33.825"/>
+</kw>
+<msg timestamp="20240312 18:57:33.825" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:33.008" endtime="20240312 18:57:33.825"/>
+</kw>
+<kw name="asserts.post.orders" library="assert_post_orders">
+<arg>response=${response}</arg>
+<arg>products=@{product}</arg>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['order_id']}</arg>
+<arg>${body['order']['order_id']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:33.827" endtime="20240312 18:57:33.828"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response.json()['order']['total_price']}</arg>
+<arg>${body['order']['total_price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:33.828" endtime="20240312 18:57:33.830"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['status']}</arg>
+<arg>${body['order']['status']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:33.830" endtime="20240312 18:57:33.831"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['customer']['name']}</arg>
+<arg>${body['order']['customer']['name']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:33.831" endtime="20240312 18:57:33.832"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['customer']['email']}</arg>
+<arg>${body['order']['customer']['email']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:33.832" endtime="20240312 18:57:33.833"/>
+</kw>
+<for flavor="IN">
+<var>${product}</var>
+<value>@{products}</value>
+<iter>
+<var name="${product}">Product A</var>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${body_items}</var>
+<arg>${body}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.882" level="INFO">${body_items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<status status="PASS" starttime="20240312 18:57:33.834" endtime="20240312 18:57:33.882"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${response_items}</var>
+<arg>${response.json()}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:33.970" level="INFO">${response_items} = [{'product': 'Product A', 'quantity': 2, 'price': 25}]</msg>
+<status status="PASS" starttime="20240312 18:57:33.883" endtime="20240312 18:57:33.970"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response_items[0]['product']}</arg>
+<arg>${body_items[0]['product']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:33.970" endtime="20240312 18:57:33.973"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['quantity']}</arg>
+<arg>${body_items[0]['quantity']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:33.974" endtime="20240312 18:57:33.976"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['price']}</arg>
+<arg>${body_items[0]['price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:33.976" endtime="20240312 18:57:33.978"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:33.834" endtime="20240312 18:57:33.978"/>
+</iter>
+<iter>
+<var name="${product}">Product B</var>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${body_items}</var>
+<arg>${body}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:34.009" level="INFO">${body_items} = [{'product': 'Product B', 'quantity': 3, 'price': 35}]</msg>
+<status status="PASS" starttime="20240312 18:57:33.978" endtime="20240312 18:57:34.009"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${response_items}</var>
+<arg>${response.json()}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:34.049" level="INFO">${response_items} = [{'product': 'Product B', 'quantity': 3, 'price': 35}]</msg>
+<status status="PASS" starttime="20240312 18:57:34.009" endtime="20240312 18:57:34.049"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response_items[0]['product']}</arg>
+<arg>${body_items[0]['product']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.049" endtime="20240312 18:57:34.051"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['quantity']}</arg>
+<arg>${body_items[0]['quantity']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:34.051" endtime="20240312 18:57:34.052"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['price']}</arg>
+<arg>${body_items[0]['price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:34.053" endtime="20240312 18:57:34.054"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:33.978" endtime="20240312 18:57:34.054"/>
+</iter>
+<iter>
+<var name="${product}">Product C</var>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${body_items}</var>
+<arg>${body}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:34.086" level="INFO">${body_items} = [{'product': 'Product C', 'quantity': 4, 'price': 45}]</msg>
+<status status="PASS" starttime="20240312 18:57:34.054" endtime="20240312 18:57:34.086"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${response_items}</var>
+<arg>${response.json()}</arg>
+<arg>$.order.items[?(@.product=="${product}")]</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20240312 18:57:34.126" level="INFO">${response_items} = [{'product': 'Product C', 'quantity': 4, 'price': 45}]</msg>
+<status status="PASS" starttime="20240312 18:57:34.086" endtime="20240312 18:57:34.127"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response_items[0]['product']}</arg>
+<arg>${body_items[0]['product']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.127" endtime="20240312 18:57:34.128"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['quantity']}</arg>
+<arg>${body_items[0]['quantity']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:34.128" endtime="20240312 18:57:34.130"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${response_items[0]['price']}</arg>
+<arg>${body_items[0]['price']}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" starttime="20240312 18:57:34.130" endtime="20240312 18:57:34.131"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:34.054" endtime="20240312 18:57:34.131"/>
+</iter>
+<status status="PASS" starttime="20240312 18:57:33.833" endtime="20240312 18:57:34.131"/>
+</for>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['street']}</arg>
+<arg>${body['order']['shipping_address']['street']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.132" endtime="20240312 18:57:34.133"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['city']}</arg>
+<arg>${body['order']['shipping_address']['city']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.133" endtime="20240312 18:57:34.134"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['order']['shipping_address']['zipcode']}</arg>
+<arg>${body['order']['shipping_address']['zipcode']}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.135" endtime="20240312 18:57:34.136"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:33.826" endtime="20240312 18:57:34.136"/>
+</kw>
+<tag>post_order</tag>
+<tag>post_order_3</tag>
+<status status="PASS" starttime="20240312 18:57:33.002" endtime="20240312 18:57:34.137"/>
+</test>
+<status status="PASS" starttime="20240312 18:57:28.128" endtime="20240312 18:57:34.139"/>
+</suite>
+<suite id="s1-s1-s2" name="Pesquisa de Pedido de Venda" source="C:\Users\douglas.fsilva\Downloads\Projetos\robot-api\suite\Pesquisa de Pedido de Venda.robot">
+<test id="s1-s1-s2-t1" name="Cenário: Buscando Pedido de Venda Existente" line="12">
+<kw name="requests.get.orders" library="get_order">
+<var>${response}</var>
+<arg>order_id=${1}</arg>
+<arg>status_code=200</arg>
+<kw name="session.orders" library="order_session">
+<var>${alias}</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${alias}</var>
+<arg>orders</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240312 18:57:34.202" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:34.202" endtime="20240312 18:57:34.202"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${headers}</var>
+<arg>user_id=user_1</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:34.203" level="INFO">${headers} = {'user_id': 'user_1'}</msg>
+<status status="PASS" starttime="20240312 18:57:34.203" endtime="20240312 18:57:34.203"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${cookies}</var>
+<arg>_id=1234</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:34.204" level="INFO">${cookies} = {'_id': '1234'}</msg>
+<status status="PASS" starttime="20240312 18:57:34.204" endtime="20240312 18:57:34.204"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>${auth}</var>
+<arg>${user_data.${env}.user_email}</arg>
+<arg>${user_data.${env}.password}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:34.208" level="INFO">${auth} = ['test_qa@robot.com', 'qa123']</msg>
+<status status="PASS" starttime="20240312 18:57:34.205" endtime="20240312 18:57:34.208"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>alias=${alias}</arg>
+<arg>url=${url.${env}}</arg>
+<arg>verify=${True}</arg>
+<arg>headers=${headers}</arg>
+<arg>cookies=${cookies}</arg>
+<arg>auth=${auth}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20240312 18:57:34.211" level="INFO">Creating Session using : alias=orders, url=https://jsonplaceholder.typicode.com, headers={'user_id': 'user_1'},                     cookies={'_id': '1234'}, auth=&lt;requests.auth.HTTPBasicAuth object at 0x0000019E59F2EE00&gt;, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20240312 18:57:34.208" endtime="20240312 18:57:34.212"/>
+</kw>
+<msg timestamp="20240312 18:57:34.212" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:34.201" endtime="20240312 18:57:34.212"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>alias=${alias}</arg>
+<arg>url=/posts/${order_id}</arg>
+<arg>expected_status=${status_code}</arg>
+<arg>msg=Falha ao realizar requisição GET</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20240312 18:57:34.679" level="INFO">GET Request : url=https://jsonplaceholder.typicode.com/posts/1 
+ path_url=/posts/1 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'user_id': 'user_1', 'Cookie': '_id=1234', 'Authorization': 'Basic dGVzdF9xYUByb2JvdC5jb206cWExMjM='} 
+ body=None 
+ </msg>
+<msg timestamp="20240312 18:57:34.679" level="INFO">GET Response : url=https://jsonplaceholder.typicode.com/posts/1 
+ status=200, reason=OK 
+ headers={'Date': 'Tue, 12 Mar 2024 21:57:55 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Report-To': '{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1699526676&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=PkpDc9%2F7NV1lTBcXvbDtouI%2FREZDOSmwP%2Fh0zw81yyc%3D"}]}', 'Reporting-Endpoints': 'heroku-nel=https://nel.heroku.com/reports?ts=1699526676&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=PkpDc9%2F7NV1lTBcXvbDtouI%2FREZDOSmwP%2Fh0zw81yyc%3D', 'Nel': '{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}', 'X-Powered-By': 'Express', 'X-Ratelimit-Limit': '1000', 'X-Ratelimit-Remaining': '999', 'X-Ratelimit-Reset': '1699526696', 'Vary': 'Origin, Accept-Encoding', 'Access-Control-Allow-Credentials': 'true', 'Cache-Control': 'max-age=43200', 'Pragma': 'no-cache', 'Expires': '-1', 'X-Content-Type-Options': 'nosniff', 'Etag': 'W/"124-yiKdLzqO5gfBrJFrcdJ8Yq0LGnU"', 'Via': '1.1 vegur', 'CF-Cache-Status': 'HIT', 'Age': '10791', 'Server': 'cloudflare', 'CF-RAY': '86370af03968c3ff-EWR', 'Content-Encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={
+  "userId": 1,
+  "id": 1,
+  "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+  "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+} 
+ </msg>
+<msg timestamp="20240312 18:57:34.680" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:34.213" endtime="20240312 18:57:34.680"/>
+</kw>
+<msg timestamp="20240312 18:57:34.680" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:34.199" endtime="20240312 18:57:34.681"/>
+</kw>
+<kw name="asserts.get.orders" library="assert_get_orders">
+<arg>response=${response}</arg>
+<if>
+<branch type="IF" condition="${response.status_code} == ${200}">
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<arg>${response.json()['userId']}</arg>
+<arg>1</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<msg timestamp="20240312 18:57:34.686" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:34.684" endtime="20240312 18:57:34.686"/>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<arg>${response.json()['id']}</arg>
+<arg>1</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<msg timestamp="20240312 18:57:34.688" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:34.686" endtime="20240312 18:57:34.688"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['title']}</arg>
+<arg>sunt aut facere repellat provident occaecati excepturi optio reprehenderit</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.688" endtime="20240312 18:57:34.690"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['body']}</arg>
+<arg>quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20240312 18:57:34.690" endtime="20240312 18:57:34.692"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:34.684" endtime="20240312 18:57:34.692"/>
+</branch>
+<branch type="ELSE">
+<kw name="Should Be Empty" library="BuiltIn">
+<arg>${response.json()}</arg>
+<doc>Verifies that the given item is empty.</doc>
+<status status="NOT RUN" starttime="20240312 18:57:34.692" endtime="20240312 18:57:34.692"/>
+</kw>
+<status status="NOT RUN" starttime="20240312 18:57:34.692" endtime="20240312 18:57:34.692"/>
+</branch>
+<status status="PASS" starttime="20240312 18:57:34.682" endtime="20240312 18:57:34.692"/>
+</if>
+<status status="PASS" starttime="20240312 18:57:34.681" endtime="20240312 18:57:34.693"/>
+</kw>
+<tag>get_order</tag>
+<tag>get_order_1</tag>
+<status status="PASS" starttime="20240312 18:57:34.197" endtime="20240312 18:57:34.693"/>
+</test>
+<test id="s1-s1-s2-t2" name="Cenário: Buscando Pedido de Venda Inexistente" line="19">
+<kw name="requests.get.orders" library="get_order">
+<var>${response}</var>
+<arg>order_id=${999}</arg>
+<arg>status_code=404</arg>
+<kw name="session.orders" library="order_session">
+<var>${alias}</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${alias}</var>
+<arg>orders</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240312 18:57:34.701" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:34.701" endtime="20240312 18:57:34.702"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${headers}</var>
+<arg>user_id=user_1</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:34.703" level="INFO">${headers} = {'user_id': 'user_1'}</msg>
+<status status="PASS" starttime="20240312 18:57:34.702" endtime="20240312 18:57:34.704"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${cookies}</var>
+<arg>_id=1234</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20240312 18:57:34.704" level="INFO">${cookies} = {'_id': '1234'}</msg>
+<status status="PASS" starttime="20240312 18:57:34.704" endtime="20240312 18:57:34.704"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>${auth}</var>
+<arg>${user_data.${env}.user_email}</arg>
+<arg>${user_data.${env}.password}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20240312 18:57:34.706" level="INFO">${auth} = ['test_qa@robot.com', 'qa123']</msg>
+<status status="PASS" starttime="20240312 18:57:34.705" endtime="20240312 18:57:34.706"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>alias=${alias}</arg>
+<arg>url=${url.${env}}</arg>
+<arg>verify=${True}</arg>
+<arg>headers=${headers}</arg>
+<arg>cookies=${cookies}</arg>
+<arg>auth=${auth}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20240312 18:57:34.709" level="INFO">Creating Session using : alias=orders, url=https://jsonplaceholder.typicode.com, headers={'user_id': 'user_1'},                     cookies={'_id': '1234'}, auth=&lt;requests.auth.HTTPBasicAuth object at 0x0000019E59F53BE0&gt;, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20240312 18:57:34.707" endtime="20240312 18:57:34.710"/>
+</kw>
+<msg timestamp="20240312 18:57:34.710" level="INFO">${alias} = orders</msg>
+<status status="PASS" starttime="20240312 18:57:34.700" endtime="20240312 18:57:34.710"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>alias=${alias}</arg>
+<arg>url=/posts/${order_id}</arg>
+<arg>expected_status=${status_code}</arg>
+<arg>msg=Falha ao realizar requisição GET</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20240312 18:57:35.257" level="INFO">GET Request : url=https://jsonplaceholder.typicode.com/posts/999 
+ path_url=/posts/999 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'user_id': 'user_1', 'Cookie': '_id=1234', 'Authorization': 'Basic dGVzdF9xYUByb2JvdC5jb206cWExMjM='} 
+ body=None 
+ </msg>
+<msg timestamp="20240312 18:57:35.257" level="INFO">GET Response : url=https://jsonplaceholder.typicode.com/posts/999 
+ status=404, reason=Not Found 
+ headers={'Date': 'Tue, 12 Mar 2024 21:57:56 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '2', 'Connection': 'keep-alive', 'Report-To': '{"group":"heroku-nel","max_age":3600,"endpoints":[{"url":"https://nel.heroku.com/reports?ts=1710273617&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=n%2BMAyuff8Uj21tGGyOzLk7mTq5%2B7z1VFiPXwbrwSDkA%3D"}]}', 'Reporting-Endpoints': 'heroku-nel=https://nel.heroku.com/reports?ts=1710273617&amp;sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&amp;s=n%2BMAyuff8Uj21tGGyOzLk7mTq5%2B7z1VFiPXwbrwSDkA%3D', 'Nel': '{"report_to":"heroku-nel","max_age":3600,"success_fraction":0.005,"failure_fraction":0.05,"response_headers":["Via"]}', 'X-Powered-By': 'Express', 'X-Ratelimit-Limit': '1000', 'X-Ratelimit-Remaining': '999', 'X-Ratelimit-Reset': '1710273625', 'Vary': 'Origin, Accept-Encoding', 'Access-Control-Allow-Credentials': 'true', 'Cache-Control': 'max-age=43200', 'Pragma': 'no-cache', 'Expires': '-1', 'X-Content-Type-Options': 'nosniff', 'Etag': 'W/"2-vyGp6PvFo4RvsFtPoIWeCReyIC8"', 'Via': '1.1 vegur', 'CF-Cache-Status': 'HIT', 'Age': '7059', 'Server': 'cloudflare', 'CF-RAY': '86370af3bccee873-DFW', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={} 
+ </msg>
+<msg timestamp="20240312 18:57:35.257" level="INFO">${response} = &lt;Response [404]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:34.711" endtime="20240312 18:57:35.257"/>
+</kw>
+<msg timestamp="20240312 18:57:35.258" level="INFO">${response} = &lt;Response [404]&gt;</msg>
+<status status="PASS" starttime="20240312 18:57:34.697" endtime="20240312 18:57:35.258"/>
+</kw>
+<kw name="asserts.get.orders" library="assert_get_orders">
+<arg>response=${response}</arg>
+<if>
+<branch type="IF" condition="${response.status_code} == ${200}">
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<arg>${response.json()['userId']}</arg>
+<arg>1</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="NOT RUN" starttime="20240312 18:57:35.260" endtime="20240312 18:57:35.260"/>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<arg>${response.json()['id']}</arg>
+<arg>1</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="NOT RUN" starttime="20240312 18:57:35.260" endtime="20240312 18:57:35.260"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['title']}</arg>
+<arg>sunt aut facere repellat provident occaecati excepturi optio reprehenderit</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="NOT RUN" starttime="20240312 18:57:35.260" endtime="20240312 18:57:35.260"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${response.json()['body']}</arg>
+<arg>quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="NOT RUN" starttime="20240312 18:57:35.260" endtime="20240312 18:57:35.260"/>
+</kw>
+<status status="NOT RUN" starttime="20240312 18:57:35.260" endtime="20240312 18:57:35.261"/>
+</branch>
+<branch type="ELSE">
+<kw name="Should Be Empty" library="BuiltIn">
+<arg>${response.json()}</arg>
+<doc>Verifies that the given item is empty.</doc>
+<msg timestamp="20240312 18:57:35.261" level="INFO">Length is 0</msg>
+<status status="PASS" starttime="20240312 18:57:35.261" endtime="20240312 18:57:35.261"/>
+</kw>
+<status status="PASS" starttime="20240312 18:57:35.261" endtime="20240312 18:57:35.261"/>
+</branch>
+<status status="PASS" starttime="20240312 18:57:35.259" endtime="20240312 18:57:35.261"/>
+</if>
+<status status="PASS" starttime="20240312 18:57:35.259" endtime="20240312 18:57:35.262"/>
+</kw>
+<tag>get_order</tag>
+<tag>get_order_2</tag>
+<status status="PASS" starttime="20240312 18:57:34.696" endtime="20240312 18:57:35.262"/>
+</test>
+<status status="PASS" starttime="20240312 18:57:34.142" endtime="20240312 18:57:35.264"/>
+</suite>
+<status status="PASS" starttime="20240312 18:57:28.121" endtime="20240312 18:57:35.267"/>
+</suite>
+<status status="PASS" starttime="20240312 18:57:28.082" endtime="20240312 18:57:35.272"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="2" fail="0" skip="0">get_order</stat>
+<stat pass="1" fail="0" skip="0">get_order_1</stat>
+<stat pass="1" fail="0" skip="0">get_order_2</stat>
+<stat pass="3" fail="0" skip="0">post_order</stat>
+<stat pass="1" fail="0" skip="0">post_order_1</stat>
+<stat pass="1" fail="0" skip="0">post_order_2</stat>
+<stat pass="1" fail="0" skip="0">post_order_3</stat>
+</tag>
+<suite>
+<stat pass="5" fail="0" skip="0" id="s1" name="Robot-Api">Robot-Api</stat>
+<stat pass="5" fail="0" skip="0" id="s1-s1" name="Suite">Robot-Api.Suite</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s1-s1" name="Criação de Pedido de Venda">Robot-Api.Suite.Criação de Pedido de Venda</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s1-s2" name="Pesquisa de Pedido de Venda">Robot-Api.Suite.Pesquisa de Pedido de Venda</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
