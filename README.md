@@ -1,67 +1,76 @@
-
 # Testando API com Robot Framework
+
+[![Robot Framework](https://img.shields.io/badge/Robot%20Framework-6.0+-blue.svg)](https://robotframework.org/)
+[![Python](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/)
+[![Poetry](https://img.shields.io/badge/Poetry-latest-orange.svg)](https://python-poetry.org/)
 
 Projeto do curso do [Vini Trindade](https://www.linkedin.com/in/vinicius-trindade-81536b198/) de Teste de API com Robot Framework.
 
+## 📚 Referência
 
+- [Link do Curso](https://robotcourses.com.br/courses/testando-apis-com-robot-framework/)
 
-## Referência
+## 📋 Apêndice
 
- - [Link do Curso](https://robotcourses.com.br/courses/testando-apis-com-robot-framework/)
+Usamos o **Poetry** nesse projeto, no lugar do pip.
 
+## 🚀 Rodando localmente
 
-## Apêndice
+### Configuração do Ambiente
 
-Usamos o poetry nesse projeto, no lugar do pip.
-
-
-## Rodando localmente
-
-
-
-Criando o ambiente virtual
+**Criando o ambiente virtual:**
 ```bash
-  poetry shell
+poetry shell
 ```
 
-Sabendo o caminho do Python no Windows
+**Verificando o caminho do Python:**
+
+Windows:
 ```bash
-  poetry run where python
+poetry run where python
 ```
 
-Sabendo o caminho do Python no Unix
+Unix/Linux/macOS:
 ```bash
-  poetry run which python
+poetry run which python
 ```
 
-Instalando as dependências
+**Instalando as dependências:**
 ```bash
-  poetry install
+poetry install
 ```
 
-Rodando apenas os testes do POST
+### Executando os Testes
+
+**Rodando apenas os testes do POST:**
 ```bash
-  robot -d log -i post_order .
+robot -d log -i post_order .
 ```
 
-Rodando apenas os testes do GET
+**Rodando apenas os testes do GET:**
 ```bash
-  robot -d log -i get_order .
+robot -d log -i get_order .
 ```
 
-Rodando tudo
+**Rodando todos os testes:**
 ```bash
-  robot -d log .
+robot -d log .
 ```
 
-Rodando com variável de linha de comando
+### Executando com Variáveis de Ambiente
+
 ```bash
-  robot -d log -v env:qa .
-  robot -d log -v env:prod .
-  robot -d log -v env:preprod .
+robot -d log -v env:qa .
+robot -d log -v env:prod .
+robot -d log -v env:preprod .
 ```
 
-Obs: Apenas esse vai funcionar, pq não tem as URL`s de PROD e PREPROD.
+> **⚠️ Observação:** Apenas o ambiente QA está configurado atualmente, pois não há URLs configuradas para PROD e PREPROD.
+
 ```bash
-  robot -d log -v env:qa .
+robot -d log -v env:qa .
 ```
+
+---
+
+**Desenvolvido com ❤️ usando Robot Framework**
