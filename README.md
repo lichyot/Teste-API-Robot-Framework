@@ -1,7 +1,7 @@
 
 # Testando API com Robot Framework
 
-Projeto do curso do [Vini Andrade](https://www.linkedin.com/in/vinicius-trindade-81536b198/) de Teste de API com Robot Framework.
+Projeto do curso do [Vini Trindade](https://www.linkedin.com/in/vinicius-trindade-81536b198/) de Teste de API com Robot Framework.
 
 
 
